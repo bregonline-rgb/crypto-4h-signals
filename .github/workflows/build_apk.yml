@@ -1,0 +1,31 @@
+name: Build Android APK
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip python3-setuptools build-essential git zlib1g-dev libncurses5-dev libstdc++6
+          pip install --upgrade pip
+          pip install cython
+          pip install buildozer
+      - name: Build APK
+        run: |
+          cd android_app
+          buildozer -v android debug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: crypto-apk
+          path: android_app/bin/*
