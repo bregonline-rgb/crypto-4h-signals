@@ -1,0 +1,5 @@
+# Kivy and supporting libs
+kivy
+ccxt
+pandas
+numpy
